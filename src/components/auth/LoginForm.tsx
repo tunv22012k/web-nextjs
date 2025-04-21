@@ -2,12 +2,16 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { loginSchema, type LoginFormData } from "@/lib/validations/auth";
-import { useFormValidation } from "@/hooks/useFormValidation";
-import { ROLES } from "@/lib/constants/roles";
-import { USER_ROUTES, SALESMAN_ROUTES, ADMIN_ROUTES, AUTH_ROUTES } from "@/lib/constants/routes";
-import { getMessages } from "@/lib/messages";
-import { API_ENDPOINTS } from "@/lib/api/endpoints";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginSchema, LoginFormData } from '@/lib/validations/auth';
+import { ROLES, ROLE_ROUTES } from '@/lib/constants/roles';
+import { getMessages } from '@/lib/messages';
+import { api } from '@/lib/api/axios';
+import { ApiError } from '@/lib/types/api';
+import { cookieHelper } from '@/lib/utils/cookie';
+import { API_ENDPOINTS } from '@/lib/api/endpoints';
+import { AxiosError } from 'axios';
 
 interface LoginFormProps {
   role: typeof ROLES[keyof typeof ROLES];
@@ -15,111 +19,86 @@ interface LoginFormProps {
 
 export default function LoginForm({ role }: LoginFormProps) {
   const router = useRouter();
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string>('');
   const messages = getMessages();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useFormValidation({
-    schema: loginSchema,
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
-      password: '',
       role,
-      remember: false,
     },
   });
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const response = await fetch(API_ENDPOINTS.auth.login, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+      const response = await api.post(API_ENDPOINTS.auth.login, data);
+      const { access_token, refresh_token } = response.data;
+
+      // Set tokens in cookies
+      cookieHelper.set('access_token', access_token, {
+        expires: 1, // 1 day
+      });
+      cookieHelper.set('refresh_token', refresh_token, {
+        expires: 7, // 7 days
       });
 
-      if (response.ok) {
-        // Redirect based on role
-        switch (role) {
-          case ROLES.USER:
-            router.push(USER_ROUTES.dashboard);
-            break;
-          case ROLES.SALESMAN:
-            router.push(SALESMAN_ROUTES.dashboard);
-            break;
-          case ROLES.ADMIN:
-            router.push(ADMIN_ROUTES.dashboard);
-            break;
-        }
-      } else {
-        const errorData = await response.json();
-        setError(errorData.message || messages.auth.login.error);
-      }
-    } catch {
-      setError(messages.auth.login.server_error);
+      // Redirect based on role
+      router.push(ROLE_ROUTES[role].dashboard);
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiError>;
+      setError(axiosError.response?.data?.message || messages.auth.login.error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       {error && (
-        <div className="text-red-500 text-center">{error}</div>
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <span className="block sm:inline">{error}</span>
+        </div>
       )}
-      <div className="rounded-md shadow-sm -space-y-px">
-        <div>
-          <input
-            type="email"
-            {...register("email")}
-            className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-            placeholder="Email"
-          />
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
-          )}
-        </div>
-        <div>
-          <input
-            type="password"
-            {...register("password")}
-            className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-            placeholder="Mật khẩu"
-          />
-          {errors.password && (
-            <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
-          )}
-        </div>
+      
+      <div>
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          Email
+        </label>
+        <input
+          type="email"
+          id="email"
+          {...register('email')}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+        />
+        {errors.email && (
+          <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+        )}
       </div>
 
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            {...register("remember")}
-            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-          />
-          <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-            Ghi nhớ đăng nhập
-          </label>
-        </div>
-
-        <div className="text-sm">
-          <a href={AUTH_ROUTES.forgotPassword} className="font-medium text-indigo-600 hover:text-indigo-500">
-            Quên mật khẩu?
-          </a>
-        </div>
+      <div>
+        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+          Mật khẩu
+        </label>
+        <input
+          type="password"
+          id="password"
+          {...register('password')}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+        />
+        {errors.password && (
+          <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+        )}
       </div>
 
       <div>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
         >
-          {isSubmitting ? messages.common.processing : messages.auth.login.role[role]}
+          {isSubmitting ? messages.common.loading : messages.auth.login.role[role]}
         </button>
       </div>
     </form>

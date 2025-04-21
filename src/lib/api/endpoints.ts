@@ -6,5 +6,6 @@ export const API_ENDPOINTS = {
     register: `${API_URL}/api/register`,
     logout: `${API_URL}/api/logout`,
     user: `${API_URL}/api/user`,
+    refresh: `${API_URL}/api/refresh`,
   },
 }; 

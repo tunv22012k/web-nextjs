@@ -8,10 +8,6 @@ export const COMMON_ROUTES = {
 } as const;
 
 export const AUTH_ROUTES = {
-  loginUser: '/login',
-  loginSalesman: '/salesman/login',
-  loginAdmin: '/admin/login',
-  register: '/auth/register',
   forgotPassword: '/auth/forgot-password',
   resetPassword: '/auth/reset-password',
   verifyEmail: '/auth/verify-email',
