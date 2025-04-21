@@ -43,7 +43,7 @@ export default function LoginForm({ role }: LoginFormProps) {
         expires: 1, // 1 day
       });
       cookieHelper.set('refresh_token', refresh_token, {
-        expires: 7, // 7 days
+        expires: 30, // 30 days
       });
 
       // Redirect based on role
