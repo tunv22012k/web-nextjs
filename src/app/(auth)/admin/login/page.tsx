@@ -3,15 +3,16 @@
 import LoginForm from "@/components/auth/LoginForm";
 import { ROLES } from "@/lib/constants/roles";
 import { getMessages } from "@/lib/messages";
+import styles from './page.module.css';
 
 export default function AdminLoginPage() {
   const messages = getMessages();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-md">
+    <div className={styles.loginContainer}>
+      <div className={styles.loginBox}>
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className={styles.loginTitle}>
             {messages.auth.login.role["03"]}
           </h2>
         </div>

@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { loginSchema, type LoginFormData } from "@/lib/validations/auth";
 import { useFormValidation } from "@/hooks/useFormValidation";
-import { ROLES, ROLE_ROUTES } from "@/lib/constants/roles";
+import { ROLES } from "@/lib/constants/roles";
+import { USER_ROUTES, SALESMAN_ROUTES, ADMIN_ROUTES, AUTH_ROUTES } from "@/lib/constants/routes";
 import { getMessages } from "@/lib/messages";
 import { API_ENDPOINTS } from "@/lib/api/endpoints";
 
@@ -42,7 +43,18 @@ export default function LoginForm({ role }: LoginFormProps) {
       });
 
       if (response.ok) {
-        router.push(ROLE_ROUTES[role].dashboard);
+        // Redirect based on role
+        switch (role) {
+          case ROLES.USER:
+            router.push(USER_ROUTES.dashboard);
+            break;
+          case ROLES.SALESMAN:
+            router.push(SALESMAN_ROUTES.dashboard);
+            break;
+          case ROLES.ADMIN:
+            router.push(ADMIN_ROUTES.dashboard);
+            break;
+        }
       } else {
         const errorData = await response.json();
         setError(errorData.message || messages.auth.login.error);
@@ -95,7 +107,7 @@ export default function LoginForm({ role }: LoginFormProps) {
         </div>
 
         <div className="text-sm">
-          <a href="/auth/forgot-password" className="font-medium text-indigo-600 hover:text-indigo-500">
+          <a href={AUTH_ROUTES.forgotPassword} className="font-medium text-indigo-600 hover:text-indigo-500">
             Quên mật khẩu?
           </a>
         </div>

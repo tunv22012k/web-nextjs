@@ -2,18 +2,20 @@
 
 import LoginForm from "@/components/auth/LoginForm";
 import { ROLES } from "@/lib/constants/roles";
+import { AUTH_ROUTES } from "@/lib/constants/routes";
+import styles from './page.module.css';
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-md">
+    <div className={styles.loginContainer}>
+      <div className={styles.loginBox}>
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className={styles.loginTitle}>
             Đăng nhập vào tài khoản
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className={styles.loginSubtitle}>
             Hoặc{' '}
-            <a href="/auth/register" className="font-medium text-indigo-600 hover:text-indigo-500">
+            <a href={AUTH_ROUTES.register} className={styles.loginLink}>
               đăng ký tài khoản mới
             </a>
           </p>
