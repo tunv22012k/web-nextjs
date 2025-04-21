@@ -5,12 +5,21 @@ export const messages = {
       error: "Đăng nhập thất bại",
       invalid_credentials: "Email hoặc mật khẩu không hợp lệ",
       server_error: "Không thể kết nối đến máy chủ",
+      role: {
+        "01": "Đăng nhập người dùng",
+        "02": "Đăng nhập nhân viên bán hàng",
+        "03": "Đăng nhập quản trị viên",
+      },
     },
     register: {
       success: "Đăng ký thành công",
       error: "Đăng ký thất bại",
       email_exists: "Email đã tồn tại",
       server_error: "Không thể kết nối đến máy chủ",
+      role: {
+        "01": "Đăng ký người dùng mới",
+        "02": "Đăng ký nhân viên bán hàng",
+      },
     },
     validation: {
       email: {
@@ -30,6 +39,10 @@ export const messages = {
       },
       phone: {
         pattern: "Số điện thoại không hợp lệ",
+      },
+      role: {
+        required: "Vai trò là bắt buộc",
+        invalid: "Vai trò không hợp lệ",
       },
     },
   },

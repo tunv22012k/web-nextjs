@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { getMessages } from "@/lib/messages";
+import { ROLES } from "@/lib/constants/roles";
 
 // Get messages for current locale
 const messages = getMessages();
@@ -28,6 +29,9 @@ export const ValidationMessages = {
     min: "Họ tên phải có ít nhất 2 ký tự",
     max: "Họ tên không được quá 50 ký tự",
   },
+  role: {
+    invalid: "Vai trò không hợp lệ",
+  },
 };
 
 // Base schemas
@@ -44,11 +48,15 @@ export const nameSchema = z
   .string()
   .min(2, messages.auth.validation.name.min)
   .max(50, messages.auth.validation.name.max);
+export const roleSchema = z.enum([ROLES.USER, ROLES.SALESMAN, ROLES.ADMIN], {
+  errorMap: () => ({ message: messages.auth.validation.role.invalid }),
+});
 
 // Login schema
 export const loginSchema = z.object({
   email: emailSchema,
   password: z.string().min(1, messages.auth.validation.password.required),
+  role: roleSchema,
   remember: z.boolean().optional(),
 });
 
@@ -60,6 +68,9 @@ export const registerSchema = z
     confirmPassword: z.string(),
     name: nameSchema,
     phone: phoneSchema,
+    role: z.enum([ROLES.USER, ROLES.SALESMAN], {
+      errorMap: () => ({ message: messages.auth.validation.role.invalid }),
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: messages.auth.validation.password.confirm,
@@ -69,6 +80,7 @@ export const registerSchema = z
 // Forgot password schema
 export const forgotPasswordSchema = z.object({
   email: emailSchema,
+  role: roleSchema,
 });
 
 // Reset password schema

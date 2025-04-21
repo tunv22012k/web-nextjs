@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { registerSchema, type RegisterFormData } from "@/lib/validations/auth";
 import { useFormValidation } from "@/hooks/useFormValidation";
+import { API_ENDPOINTS } from "@/lib/api/endpoints";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -26,7 +27,7 @@ export default function RegisterForm() {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      const response = await fetch("/api/auth/register", {
+      const response = await fetch(API_ENDPOINTS.auth.register, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

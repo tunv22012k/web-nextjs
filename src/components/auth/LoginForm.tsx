@@ -4,10 +4,18 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { loginSchema, type LoginFormData } from "@/lib/validations/auth";
 import { useFormValidation } from "@/hooks/useFormValidation";
+import { ROLES, ROLE_ROUTES } from "@/lib/constants/roles";
+import { getMessages } from "@/lib/messages";
+import { API_ENDPOINTS } from "@/lib/api/endpoints";
 
-export default function LoginForm() {
+interface LoginFormProps {
+  role: typeof ROLES[keyof typeof ROLES];
+}
+
+export default function LoginForm({ role }: LoginFormProps) {
   const router = useRouter();
   const [error, setError] = useState('');
+  const messages = getMessages();
 
   const {
     register,
@@ -18,13 +26,14 @@ export default function LoginForm() {
     defaultValues: {
       email: '',
       password: '',
+      role,
       remember: false,
     },
   });
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(API_ENDPOINTS.auth.login, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,13 +42,13 @@ export default function LoginForm() {
       });
 
       if (response.ok) {
-        router.push('/dashboard');
+        router.push(ROLE_ROUTES[role].dashboard);
       } else {
         const errorData = await response.json();
-        setError(errorData.message || 'Đăng nhập thất bại');
+        setError(errorData.message || messages.auth.login.error);
       }
     } catch {
-      setError('Có lỗi xảy ra khi đăng nhập');
+      setError(messages.auth.login.server_error);
     }
   };
 
@@ -98,7 +107,7 @@ export default function LoginForm() {
           disabled={isSubmitting}
           className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
         >
-          {isSubmitting ? "Đang xử lý..." : "Đăng nhập"}
+          {isSubmitting ? messages.common.processing : messages.auth.login.role[role]}
         </button>
       </div>
     </form>
