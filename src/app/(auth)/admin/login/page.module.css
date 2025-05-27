@@ -1,0 +1,40 @@
+.loginContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fef2f2;
+}
+
+.loginBox {
+  max-width: 28rem;
+  width: 100%;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.loginTitle {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: #b91c1c;
+}
+
+.loginSubtitle {
+  margin-top: 0.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.loginLink {
+  font-weight: 500;
+  color: #dc2626;
+}
+
+.loginLink:hover {
+  color: #b91c1c;
+} 
