@@ -2,7 +2,6 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { API_ENDPOINTS } from './endpoints';
 import { cookieHelper } from '@/lib/utils/cookie';
 import { ApiError } from '@/lib/types/api';
-import { log } from 'console';
 
 // Extend InternalAxiosRequestConfig to include _retry
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {

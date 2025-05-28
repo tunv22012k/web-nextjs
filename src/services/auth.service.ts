@@ -9,8 +9,9 @@ export const login = async (data: LoginFormData) => {
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data?.error || 'Login failed');
+      throw (error.response?.data?.message || 'Login failed');
     }
+    
     throw error;
   }
 };
@@ -21,7 +22,7 @@ export const logout = async () => {
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data?.error || 'Logout failed');
+      throw (error.response?.data?.error || 'Logout failed');
     }
     throw error;
   }

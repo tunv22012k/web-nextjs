@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import { getMessage } from '@/lib/utils/getMessage';
 
 export const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -16,7 +17,7 @@ export const LoginForm = () => {
     try {
       await handleLogin(email, password);
     } catch (err) {
-      setError('Invalid email or password');
+      setError(getMessage(err));
     }
   };
 
