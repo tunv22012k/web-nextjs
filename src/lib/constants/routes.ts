@@ -8,12 +8,14 @@ export const COMMON_ROUTES = {
 } as const;
 
 export const AUTH_ROUTES = {
-  forgotPassword: '/auth/forgot-password',
-  resetPassword: '/auth/reset-password',
-  verifyEmail: '/auth/verify-email',
+  forgotPassword: '/forgot-password',
+  resetPassword: '/reset-password',
+  verifyEmail: '/verify-email',
 } as const;
 
 export const USER_ROUTES = {
+  login: '/login',
+  register: '/register',
   dashboard: '/dashboard',
   profile: '/user/profile',
   settings: '/user/settings',
@@ -22,6 +24,8 @@ export const USER_ROUTES = {
 } as const;
 
 export const SALESMAN_ROUTES = {
+  login: '/salesman/login',
+  register: '/salesman/register',
   dashboard: '/salesman/dashboard',
   profile: '/salesman/profile',
   settings: '/salesman/settings',
@@ -31,6 +35,7 @@ export const SALESMAN_ROUTES = {
 } as const;
 
 export const ADMIN_ROUTES = {
+  login: '/admin/login',
   dashboard: '/admin/dashboard',
   users: '/admin/users',
   salesmen: '/admin/salesmen',

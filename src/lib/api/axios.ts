@@ -66,7 +66,7 @@ api.interceptors.response.use(
         cookieHelper.delete('access_token');
         cookieHelper.delete('refresh_token');
         if (typeof window !== 'undefined') {
-          window.location.href = '/auth/login';
+          window.location.href = '/login';
         }
       }
     }

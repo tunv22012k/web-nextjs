@@ -14,19 +14,19 @@ export const useAuth = () => {
 
   useEffect(() => {
     // Check if user is logged in
-    const checkAuth = async () => {
-      try {
-        const response = await fetch('/api/auth/me');
-        if (response.ok) {
-          const user = await response.json();
-          setAuthState({ isAuthenticated: true, user });
-        }
-      } catch (error) {
-        setAuthState({ isAuthenticated: false, user: null });
-      }
-    };
+    // const checkAuth = async () => {
+    //   try {
+    //     const response = await fetch('/api/auth/me');
+    //     if (response.ok) {
+    //       const user = await response.json();
+    //       setAuthState({ isAuthenticated: true, user });
+    //     }
+    //   } catch (error) {
+    //     setAuthState({ isAuthenticated: false, user: null });
+    //   }
+    // };
 
-    checkAuth();
+    // checkAuth();
   }, []);
 
   const handleLogin = async (email: string, password: string) => {

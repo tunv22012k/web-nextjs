@@ -1,8 +1,7 @@
 'use client';
 
-import LoginForm from "@/components/auth/LoginForm";
-import { ROLES } from "@/lib/constants/roles";
-import { AUTH_ROUTES } from "@/lib/constants/routes";
+import { LoginForm } from "@/components/auth/LoginForm";
+import { USER_ROUTES } from "@/lib/constants/routes";
 import styles from './page.module.css';
 
 export default function LoginPage() {
@@ -15,12 +14,12 @@ export default function LoginPage() {
           </h2>
           <p className={styles.loginSubtitle}>
             Hoặc{' '}
-            <a href={AUTH_ROUTES.register} className={styles.loginLink}>
+            <a href={USER_ROUTES.register} className={styles.loginLink}>
               đăng ký tài khoản mới
             </a>
           </p>
         </div>
-        <LoginForm role={ROLES.USER} />
+        <LoginForm />
       </div>
     </div>
   );
