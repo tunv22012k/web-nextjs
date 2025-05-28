@@ -2,6 +2,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { API_ENDPOINTS } from './endpoints';
 import { cookieHelper } from '@/lib/utils/cookie';
 import { ApiError } from '@/lib/types/api';
+import { log } from 'console';
 
 // Extend InternalAxiosRequestConfig to include _retry
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
@@ -10,7 +11,7 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 
 // Create axios instance
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api',
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
@@ -39,7 +40,9 @@ api.interceptors.response.use(
   },
   async (error: AxiosError<ApiError>) => {
     const originalRequest = error.config as CustomAxiosRequestConfig;
-    if (!originalRequest) return Promise.reject(error);
+    if (!originalRequest) {
+      return Promise.reject(error);
+    }
 
     // Handle token refresh if needed
     if (error.response?.status === 401 && !originalRequest._retry) {
@@ -47,7 +50,7 @@ api.interceptors.response.use(
       try {
         const refreshToken = cookieHelper.get('refresh_token');
         if (refreshToken) {
-          const response = await api.post(API_ENDPOINTS.auth.refresh, {
+          const response = await api.post(API_ENDPOINTS.AUTH.REFRESH, {
             refresh_token: refreshToken,
           });
           const { access_token } = response.data;
@@ -70,6 +73,7 @@ api.interceptors.response.use(
         }
       }
     }
+
     return Promise.reject(error);
   }
 ); 

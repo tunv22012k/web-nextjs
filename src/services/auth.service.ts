@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { api } from '@/config/axios';
-import { API_ENDPOINTS } from '@/config/api-endpoints';
+import { api } from '@/lib/api/axios';
+import { API_ENDPOINTS } from '@/lib/api/endpoints';
 import { LoginFormData } from '@/types/auth';
 
 export const login = async (data: LoginFormData) => {
