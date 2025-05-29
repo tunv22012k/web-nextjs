@@ -27,20 +27,20 @@ export default function RegisterForm() {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      const response = await fetch(API_ENDPOINTS.auth.register, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      // const response = await fetch(API_ENDPOINTS.auth.register, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(data),
+      // });
 
-      if (response.ok) {
-        router.push("/auth/login?registered=true");
-      } else {
-        const errorData = await response.json();
-        setError(errorData.message || "Đăng ký thất bại");
-      }
+      // if (response.ok) {
+      //   router.push("/auth/login?registered=true");
+      // } else {
+      //   const errorData = await response.json();
+      //   setError(errorData.message || "Đăng ký thất bại");
+      // }
     } catch {
       setError("Có lỗi xảy ra khi đăng ký");
     }

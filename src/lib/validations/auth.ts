@@ -1,38 +1,10 @@
 import { z } from "zod";
-import { getMessages } from "@/lib/messages";
+import { messages } from "@/lib/messages/vi";
 import { ROLES } from "@/lib/constants/roles";
-
-// Get messages for current locale
-const messages = getMessages();
 
 // Regex patterns
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 const PHONE_REGEX = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
-
-// Common validation messages
-export const ValidationMessages = {
-  required: "Trường này là bắt buộc",
-  email: {
-    invalid: "Email không hợp lệ",
-    required: "Email là bắt buộc",
-  },
-  password: {
-    required: "Mật khẩu là bắt buộc",
-    min: "Mật khẩu phải có ít nhất 8 ký tự",
-    pattern: "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số",
-  },
-  phone: {
-    pattern: "Số điện thoại không hợp lệ",
-  },
-  name: {
-    required: "Họ tên là bắt buộc",
-    min: "Họ tên phải có ít nhất 2 ký tự",
-    max: "Họ tên không được quá 50 ký tự",
-  },
-  role: {
-    invalid: "Vai trò không hợp lệ",
-  },
-};
 
 // Base schemas
 export const emailSchema = z.string().email(messages.auth.validation.email.invalid);

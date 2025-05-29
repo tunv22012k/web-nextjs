@@ -9,14 +9,3 @@ export interface ApiResponse<T> {
   message?: string;
   status: number;
 }
-
-export interface LoginResponse {
-  access_token: string;
-  refresh_token: string;
-  user: {
-    id: number;
-    name: string;
-    email: string;
-    role: string;
-  };
-} 
