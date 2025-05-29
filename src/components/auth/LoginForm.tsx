@@ -1,68 +1,100 @@
 "use client";
 
 import { useState } from 'react';
-import { useAuth } from '@/hooks/useAuth';
+import { useForm } from "react-hook-form";
 import { getMessage } from '@/lib/utils/getMessage';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, type LoginFormData } from "@/lib/validations/auth";
+import { useAuth } from "@/hooks/useAuth";
+import { ROLES } from "@/lib/constants/roles";
 
 export const LoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const { handleLogin } = useAuth();
+  const [error, setError] = useState('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      remember: false,
+      role: ROLES.USER,
+    },
+    mode: "onChange", // validate khi người dùng thay đổi input
+  });
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: LoginFormData) => {
     setError('');
 
     try {
-      await handleLogin(email, password);
+      await handleLogin(data.email, data.password);
     } catch (err) {
       setError(getMessage(err));
     }
   };
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
           {error}
         </div>
       )}
-      
+
+      {/* Email */}
       <div>
         <label htmlFor="email" className="block text-sm font-medium text-gray-700">
           Email
         </label>
         <input
-          type="email"
           id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="email"
+          {...register("email")}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-          required
         />
+        {errors.email && (
+          <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+        )}
       </div>
 
+      {/* Password */}
       <div>
         <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-          Password
+          Mật khẩu
         </label>
         <input
-          type="password"
           id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          type="password"
+          {...register("password")}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-          required
         />
+        {errors.password && (
+          <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+        )}
+      </div>
+
+      {/* Checkbox */}
+      <div className="flex items-center">
+        <input
+          id="remember"
+          type="checkbox"
+          {...register("remember")}
+          className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+        />
+        <label htmlFor="remember" className="ml-2 block text-sm text-gray-900">
+          Ghi nhớ đăng nhập
+        </label>
       </div>
 
       <button
         type="submit"
         className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >
-        Sign in
+        Đăng nhập
       </button>
     </form>
   );
-}; 
+};
