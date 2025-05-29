@@ -1,5 +1,4 @@
 export const COMMON_ROUTES = {
-  home: '/',
   about: '/about',
   contact: '/contact',
   privacy: '/privacy',
