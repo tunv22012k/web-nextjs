@@ -20,10 +20,9 @@ export const LoginForm = () => {
     defaultValues: {
       email: "",
       password: "",
-      remember: false,
       role: ROLES.USER,
     },
-    mode: "onChange", // validate khi người dùng thay đổi input
+    mode: "onChange",
   });
 
   const onSubmit = async (data: LoginFormData) => {
@@ -74,19 +73,6 @@ export const LoginForm = () => {
         {errors.password && (
           <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
         )}
-      </div>
-
-      {/* Checkbox */}
-      <div className="flex items-center">
-        <input
-          id="remember"
-          type="checkbox"
-          {...register("remember")}
-          className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-        />
-        <label htmlFor="remember" className="ml-2 block text-sm text-gray-900">
-          Ghi nhớ đăng nhập
-        </label>
       </div>
 
       <button

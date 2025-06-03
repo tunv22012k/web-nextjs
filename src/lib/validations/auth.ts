@@ -38,8 +38,9 @@ export const registerSchema = z
     email: emailSchema,
     password: passwordSchema,
     confirmPassword: z.string(),
-    name: nameSchema,
+    first_name: nameSchema,
     phone: phoneSchema,
+    sex: z.string(),
     role: z.enum([ROLES.USER, ROLES.SALESMAN], {
       errorMap: () => ({ message: messages.auth.validation.role.invalid }),
     }),

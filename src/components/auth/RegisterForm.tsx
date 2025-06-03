@@ -1,48 +1,42 @@
-'use client';
+"use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { getMessage } from '@/lib/utils/getMessage';
 import { registerSchema, type RegisterFormData } from "@/lib/validations/auth";
-import { useFormValidation } from "@/hooks/useFormValidation";
-import { API_ENDPOINTS } from "@/lib/api/endpoints";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { ROLES } from "@/lib/constants/roles";
+import { useAuth } from "@/hooks/useAuth";
 
-export default function RegisterForm() {
-  const router = useRouter();
+export const RegisterForm = () => {
+  const { handleRegister } = useAuth();
   const [error, setError] = useState("");
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useFormValidation({
-    schema: registerSchema,
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       email: "",
       password: "",
       confirmPassword: "",
-      name: "",
+      first_name: "",
       phone: "",
+      sex: "1",
+      role: ROLES.USER,
     },
+    mode: "onChange",
   });
 
   const onSubmit = async (data: RegisterFormData) => {
-    try {
-      // const response = await fetch(API_ENDPOINTS.auth.register, {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(data),
-      // });
+    setError('');
 
-      // if (response.ok) {
-      //   router.push("/auth/login?registered=true");
-      // } else {
-      //   const errorData = await response.json();
-      //   setError(errorData.message || "Đăng ký thất bại");
-      // }
-    } catch {
-      setError("Có lỗi xảy ra khi đăng ký");
+    try {
+      await handleRegister(data.email, data.password, data.confirmPassword, data.first_name, data.phone, data.sex, data.role);
+    } catch(err) {
+      setError(getMessage(err));
     }
   };
 
@@ -54,12 +48,12 @@ export default function RegisterForm() {
         <div>
           <input
             type="text"
-            {...register("name")}
+            {...register("first_name")}
             className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder="Họ tên"
           />
-          {errors.name && (
-            <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+          {errors.first_name && (
+            <p className="mt-1 text-sm text-red-600">{errors.first_name.message}</p>
           )}
         </div>
 
@@ -85,6 +79,16 @@ export default function RegisterForm() {
           {errors.phone && (
             <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
           )}
+        </div>
+
+        <div>
+          <select
+            {...register("sex")}
+            className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+          >
+            <option value="1">Nam</option>
+            <option value="2">Nữ</option>
+          </select>
         </div>
 
         <div>

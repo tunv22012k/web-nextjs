@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { AuthState } from '@/types/auth';
-import { login, logout } from '@/services/auth.service';
+import { login, logout, register } from '@/services/auth.service';
 
 export const useAuth = () => {
   const router = useRouter();
@@ -49,9 +49,19 @@ export const useAuth = () => {
     }
   };
 
+  const handleRegister = async (email: string, password: string, password_confirmation: string, first_name: string, phone?: string, sex?: string, role?: string) => {
+    try {
+      const user = await register({ email, password, password_confirmation, first_name, phone, sex, role });
+      router.push('/login');
+    } catch (error) {
+      throw error;
+    }
+  };
+
   return {
     authState,
     handleLogin,
     handleLogout,
+    handleRegister,
   };
 }; 

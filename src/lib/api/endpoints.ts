@@ -4,6 +4,7 @@ export const API_ENDPOINTS = {
     LOGOUT: '/logout',
     ME: '/me',
     REFRESH: `/refresh`,
+    REGISTER: '/register',
   },
   // Thêm các endpoints khác ở đây
   // Ví dụ:

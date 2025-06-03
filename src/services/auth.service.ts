@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { api } from '@/lib/api/axios';
 import { API_ENDPOINTS } from '@/lib/api/endpoints';
-import { LoginFormData } from '@/types/auth';
+import { LoginFormData, RegisterFormData } from '@/types/auth';
 
 export const login = async (data: LoginFormData) => {
   try {
@@ -27,3 +27,16 @@ export const logout = async () => {
     throw error;
   }
 }; 
+
+export const register = async (data: RegisterFormData) => {
+  try {
+    const response = await api.post(API_ENDPOINTS.AUTH.REGISTER, data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error.response?.data?.message;
+    }
+    
+    throw error;
+  }
+};

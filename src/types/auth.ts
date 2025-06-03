@@ -13,6 +13,16 @@ export interface LoginFormData {
   password: string;
 }
 
+export interface RegisterFormData {
+  email: string;
+  password: string;
+  password_confirmation: string;
+  first_name: string;
+  phone?: string;
+  sex?: string;
+  role?: string;
+}
+
 export interface LoginResponse {
   access_token: string;
   refresh_token: string;
