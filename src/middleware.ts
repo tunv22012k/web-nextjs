@@ -14,7 +14,7 @@ const publicRoutes = [
 ];
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get('token')?.value;
+  const token = request.cookies.get('access_token')?.value;
   const { pathname } = request.nextUrl;
 
   // Nếu đang ở trang login và đã đăng nhập, chuyển hướng về trang chủ

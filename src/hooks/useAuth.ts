@@ -1,16 +1,12 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { AuthState } from '@/types/auth';
 import { login, logout, register } from '@/services/auth.service';
+import { cookieHelper } from '@/lib/utils/cookie';
 
 export const useAuth = () => {
   const router = useRouter();
-  const [authState, setAuthState] = useState<AuthState>({
-    isAuthenticated: false,
-    user: null,
-  });
 
   useEffect(() => {
     // Check if user is logged in
@@ -31,8 +27,17 @@ export const useAuth = () => {
 
   const handleLogin = async (email: string, password: string) => {
     try {
-      const user = await login({ email, password });
-      setAuthState({ isAuthenticated: true, user });
+      const data = await login({ email, password });
+      const { access_token, refresh_token } = data.data;
+
+      // Save tokens to cookies
+      cookieHelper.set('access_token', access_token, {
+        expires: 1, // 1 day
+      });
+      cookieHelper.set('refresh_token', refresh_token, {
+        expires: 7, // 7 days
+      });
+
       router.push('/');
     } catch (error) {
       throw error;
@@ -42,7 +47,11 @@ export const useAuth = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      setAuthState({ isAuthenticated: false, user: null });
+
+      // Remove tokens from cookies
+      cookieHelper.delete('access_token');
+      cookieHelper.delete('refresh_token');
+
       router.push('/login');
     } catch (error) {
       throw error;
@@ -59,7 +68,6 @@ export const useAuth = () => {
   };
 
   return {
-    authState,
     handleLogin,
     handleLogout,
     handleRegister,

@@ -28,7 +28,7 @@ export interface LoginResponse {
   refresh_token: string;
   user: {
     id: number;
-    name: string;
+    first_name: string;
     email: string;
     role: string;
   };

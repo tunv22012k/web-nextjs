@@ -2,6 +2,7 @@ import axios from 'axios';
 import { api } from '@/lib/api/axios';
 import { API_ENDPOINTS } from '@/lib/api/endpoints';
 import { LoginFormData, RegisterFormData } from '@/types/auth';
+import { cookieHelper } from '@/lib/utils/cookie';
 
 export const login = async (data: LoginFormData) => {
   try {
@@ -19,6 +20,7 @@ export const login = async (data: LoginFormData) => {
 export const logout = async () => {
   try {
     const response = await api.post(API_ENDPOINTS.AUTH.LOGOUT);
+    
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
