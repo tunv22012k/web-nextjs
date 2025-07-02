@@ -44,6 +44,13 @@ const Socket = () => {
 		if (input.trim() === "") return;
 	
 		try {
+			// Lấy user_id từ token
+			const decoded = token ? jwtDecode<MyJwtPayload>(token) : null;
+			const userId = decoded?.id ?? "me";
+
+			// 👉 Push ngay vào list
+			setMessages((prev) => [...prev, { message: input, user_id: userId }]);
+
 			await fetch("http://127.0.0.1:8000/api/messages", {
 				method: "POST",
 				headers: {
@@ -55,13 +62,6 @@ const Socket = () => {
 					room: roomName,
 				}),
 			});
-
-			// Lấy user_id từ token
-			const decoded = token ? jwtDecode<MyJwtPayload>(token) : null;
-			const userId = decoded?.id ?? "me";
-
-			// 👉 Push ngay vào list
-			setMessages((prev) => [...prev, { message: input, user_id: userId }]);
 
 			setInput("");
 		} catch (err) {
