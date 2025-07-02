@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { FaSearch, FaPaperPlane } from 'react-icons/fa';
-import { getEcho } from '@/lib/socket/echo';
 
 type Message = { id: number; text: string; sender: string };
 type User = { id: number; name: string; avatar: string };
@@ -18,21 +17,7 @@ const ChatUI = () => {
   ]);
 
   useEffect(() => {
-    const echo = getEcho();
-    console.log(echo);
-  
-    if (!echo){
-      return;
-    }
-
-    echo.channel('laravel_database_chat')
-      .listen('MessageSent', (e: { message: string }) => {
-        console.log('Tin nhắn từ server:', e.message);
-      });
-
-    return () => {
-      echo?.leave('chat');
-    };
+    
   }, []);
 
   const handleSendMessage = async () => {
