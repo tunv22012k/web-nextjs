@@ -1,13 +1,10 @@
 'use client';
 
-import LoginForm from "@/components/auth/LoginForm";
-import { ROLES } from "@/lib/constants/roles";
-import { getMessages } from "@/lib/messages";
+import { LoginForm } from "@/components/auth/LoginForm";
+import { messages } from "@/lib/messages/vi";
 import styles from './page.module.css';
 
 export default function SalesmanLoginPage() {
-  const messages = getMessages();
-
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginBox}>
@@ -22,7 +19,7 @@ export default function SalesmanLoginPage() {
             </a>
           </p>
         </div>
-        <LoginForm role={ROLES.SALESMAN} />
+        <LoginForm />
       </div>
     </div>
   );

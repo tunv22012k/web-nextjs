@@ -60,7 +60,7 @@ export const useAuth = () => {
 
   const handleRegister = async (email: string, password: string, password_confirmation: string, first_name: string, phone?: string, sex?: string, role?: string) => {
     try {
-      const user = await register({ email, password, password_confirmation, first_name, phone, sex, role });
+      await register({ email, password, password_confirmation, first_name, phone, sex, role });
       router.push('/login');
     } catch (error) {
       throw error;

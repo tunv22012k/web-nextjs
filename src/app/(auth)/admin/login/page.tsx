@@ -1,13 +1,10 @@
 'use client';
 
-import LoginForm from "@/components/auth/LoginForm";
-import { ROLES } from "@/lib/constants/roles";
-import { getMessages } from "@/lib/messages";
+import { LoginForm } from "@/components/auth/LoginForm";
+import { messages } from "@/lib/messages/vi";
 import styles from './page.module.css';
 
 export default function AdminLoginPage() {
-  const messages = getMessages();
-
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginBox}>
@@ -16,7 +13,7 @@ export default function AdminLoginPage() {
             {messages.auth.login.role["03"]}
           </h2>
         </div>
-        <LoginForm role={ROLES.ADMIN} />
+        <LoginForm />
       </div>
     </div>
   );
