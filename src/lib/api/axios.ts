@@ -52,13 +52,14 @@ api.interceptors.response.use(
           const response = await api.post(API_ENDPOINTS.AUTH.REFRESH, {
             refresh_token: refreshToken,
           });
-          const { access_token } = response.data;
-          
+
+          const { access_token } = response.data.data;
+
           // Set new access token
           cookieHelper.set('access_token', access_token, {
             expires: 1, // 1 day
           });
-          
+
           // Retry original request
           originalRequest.headers.Authorization = `Bearer ${access_token}`;
           return api(originalRequest);

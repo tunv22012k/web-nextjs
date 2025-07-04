@@ -1,9 +1,9 @@
 export const API_ENDPOINTS = {
   AUTH: {
-    LOGIN: '/api/login',
+    LOGIN: '/login',
     LOGOUT: '/logout',
     ME: '/me',
-    REFRESH: `/refresh`,
+    REFRESH: `/refresh_token`,
     REGISTER: '/register',
   },
   // Thêm các endpoints khác ở đây
@@ -12,4 +12,4 @@ export const API_ENDPOINTS = {
   //   PROFILE: '/user/profile',
   //   SETTINGS: '/user/settings',
   // },
-} as const; 
+} as const;

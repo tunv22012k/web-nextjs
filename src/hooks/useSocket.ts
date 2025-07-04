@@ -10,7 +10,7 @@ export default function useSocket(token: string, onMessage: (data: unknown) => v
     const socketRef = useRef<Socket | null>(null);
 
     useEffect(() => {
-        const socket = io("http://localhost:3000", {
+        const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL, {
             auth: { token },
         });
 

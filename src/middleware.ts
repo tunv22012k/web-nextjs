@@ -15,6 +15,7 @@ const publicRoutes = [
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('access_token')?.value;
+  const refreshToken = request.cookies.get('refresh_token')?.value;
   const { pathname } = request.nextUrl;
 
   // Nếu đang ở trang login và đã đăng nhập, chuyển hướng về trang chủ
@@ -26,7 +27,7 @@ export function middleware(request: NextRequest) {
   const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
 
   // Nếu không phải public route và chưa đăng nhập, chuyển hướng về trang login
-  if (!token && !isPublicRoute) {
+  if (!token && !isPublicRoute && !refreshToken) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
